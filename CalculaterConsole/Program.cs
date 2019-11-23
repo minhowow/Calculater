@@ -14,7 +14,7 @@ namespace CalculaterConsole
             Block a = Block.Parse("sin(1)");
             Block b = Block.Parse("-1");
             Block c = a.Plus(b);
-
+            
             Equation equation = Equation.Parse("sin(1+2*3)=3");
 
             Console.WriteLine(c.ToString());
