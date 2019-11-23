@@ -29,13 +29,14 @@ namespace CalculaterWPF
         {
             try
             {
-                if (Block.TryParse(textbox.Text, out var block)&&double.TryParse(multiplyerBox.Text,out var multiplyer))
+                if (Block.TryParse(textbox.Text, out var block)&&double.TryParse(XmultiplyerBox.Text,out var Xmultiplyer) && double.TryParse(YmultiplyerBox.Text, out var Ymultiplyer))
                 {
-                    textboxShow.Content = "f(x) = "+block.ToString();
-                    canvas.Children.Clear();
                     double width = ActualWidth / 2;
                     double height = ActualHeight / 2;
                     double gap = 1;
+                    textboxShow.Content = "f(x) = "+block.ToString();
+                    canvas.Children.Clear();
+
                     canvas.Children.Add(new Line()
                     {
                         X1 = -width,
@@ -54,7 +55,7 @@ namespace CalculaterWPF
                         Stroke = Brushes.Black,
                         StrokeThickness = 2
                     });
-                    for (int i = -(int)(height / multiplyer); i <= (int)(height / multiplyer); i++)
+                    for (int i = -(int)(height / Ymultiplyer); i <= (int)(height / Ymultiplyer); i++)
                     {
                         if (i != 0)
                         {
@@ -62,20 +63,20 @@ namespace CalculaterWPF
                             {
                                 X1 = -width,
                                 X2 = width,
-                                Y1 = i * multiplyer,
-                                Y2 = i * multiplyer,
+                                Y1 = i * Ymultiplyer,
+                                Y2 = i * Ymultiplyer,
                                 Stroke = Brushes.LightGray
                             });
                         }
                     }
-                    for (int i = -(int)(width / multiplyer); i <= (int)(width / multiplyer); i++)
+                    for (int i = -(int)(width / Xmultiplyer); i <= (int)(width / Xmultiplyer); i++)
                     {
                         if (i != 0)
                         {
                             canvas.Children.Add(new Line()
                             {
-                                X1 = i * multiplyer,
-                                X2 = i * multiplyer,
+                                X1 = i * Xmultiplyer,
+                                X2 = i * Xmultiplyer,
                                 Y1 = -height,
                                 Y2 = height,
                                 Stroke = Brushes.LightGray
@@ -84,14 +85,22 @@ namespace CalculaterWPF
                     }
                     for (double i = -width; i <= width; i += gap)
                     {
-                        canvas.Children.Add(new Line()
+                        try
                         {
-                            X1 = i,
-                            X2 = i + gap,
-                            Y1 = block.Calculate(i / multiplyer) * multiplyer,
-                            Y2 = block.Calculate((i + gap) / multiplyer) * multiplyer,
-                            Stroke = Brushes.Red
-                        });
+                            canvas.Children.Add(new Line()
+                            {
+                                X1 = i,
+                                X2 = i + gap,
+                                Y1 = block.Calculate(i / Xmultiplyer) * Ymultiplyer,
+                                Y2 = block.Calculate((i + gap) / Xmultiplyer) * Ymultiplyer,
+                                Stroke = Brushes.Red
+                            });
+                        }
+                        catch (Exception)
+                        {
+
+
+                        }
                     }
                 }
             }

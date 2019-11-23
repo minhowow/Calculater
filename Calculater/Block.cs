@@ -94,7 +94,7 @@ namespace Calculater
             try
             {
                 block = Parse(str);
-                if (block != null&& block.IsValid())
+                if (block != null && block.IsValid())
                 {
                     return true;
                 }
@@ -180,13 +180,7 @@ namespace Calculater
                 }
                 else
                 {
-                    Dictionary<FunctionType, string> funcName = new Dictionary<FunctionType, string>() {
-                        { FunctionType.Sin ,"sin"} ,
-                        { FunctionType.Cos ,"cos"} ,
-                        { FunctionType.Tan ,"tan"} ,
-                        { FunctionType.Root ,"root"} ,
-                    };
-                    foreach (var item in funcName)
+                    foreach (var item in FunctionBlock.funcName)
                     {
                         if (st.StartsWith(item.Value + "("))
                         {
@@ -285,13 +279,7 @@ namespace Calculater
                 }
                 else
                 {
-                    Dictionary<FunctionType, string> funcName = new Dictionary<FunctionType, string>() {
-                        { FunctionType.Sin ,"sin"} ,
-                        { FunctionType.Cos ,"cos"} ,
-                        { FunctionType.Tan ,"tan"} ,
-                        { FunctionType.Root ,"root"} ,
-                    };
-                    foreach (var item in funcName)
+                    foreach (var item in FunctionBlock.funcName)
                     {
                         if (st.StartsWith(item.Value + "("))
                         {
@@ -733,12 +721,23 @@ namespace Calculater
         Cos,
         Tan,
         Root,
+        Log,
+        Ln,
     }
 
     class FunctionBlock : Block
     {
         public readonly Block a;
         public readonly FunctionType type;
+
+        public static readonly IReadOnlyDictionary<FunctionType, string> funcName = new Dictionary<FunctionType, string>() {
+            { FunctionType.Sin ,"sin"} ,
+            { FunctionType.Cos ,"cos"} ,
+            { FunctionType.Tan ,"tan"} ,
+            { FunctionType.Root ,"root"} ,
+            { FunctionType.Log ,"log"} ,
+            { FunctionType.Ln ,"ln"} ,
+        };
 
         protected FunctionBlock(Block a, FunctionType type)
         {
@@ -763,6 +762,10 @@ namespace Calculater
                     return Math.Tan(a.Calculate(unknown));
                 case FunctionType.Root:
                     return Math.Sqrt(a.Calculate(unknown));
+                case FunctionType.Log:
+                    return Math.Log10(a.Calculate(unknown));
+                case FunctionType.Ln:
+                    return Math.Log(a.Calculate(unknown));
                 default:
                     throw new NotImplementedException();
             }
@@ -785,6 +788,10 @@ namespace Calculater
                     return $"Tan({str})";
                 case FunctionType.Root:
                     return $"Root({str})";
+                case FunctionType.Log:
+                    return $"Log({str})";
+                case FunctionType.Ln:
+                    return $"Ln({str})";
                 default:
                     throw new NotImplementedException();
             }

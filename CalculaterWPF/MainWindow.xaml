@@ -20,7 +20,9 @@
         <Label x:Name="textboxShow" Margin="0,0,0,34" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="159"/>
         <TextBox x:Name="textbox" Margin="39,0,0,6" TextWrapping="Wrap" TextChanged="TextBox_TextChanged" Text="x" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120"/>
         <Label Content="f(x) =" Margin="0,0,0,10" VerticalAlignment="Bottom" Height="23" HorizontalAlignment="Left" Width="39"/>
-        <TextBox x:Name="multiplyerBox" Margin="0,0,0,6" TextWrapping="Wrap" TextChanged="TextBox_TextChanged" Text="100" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="38"/>
-        <Label Content="배율" Margin="0,0,43,6" VerticalAlignment="Bottom" Height="27" HorizontalAlignment="Right" Width="39"/>
+        <TextBox x:Name="XmultiplyerBox" Margin="0,0,0,6" TextWrapping="Wrap" TextChanged="TextBox_TextChanged" Text="100" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="38"/>
+        <Label Content="x배율" Margin="0,0,43,6" VerticalAlignment="Bottom" Height="27" HorizontalAlignment="Right" Width="39"/>
+        <TextBox x:Name="YmultiplyerBox" Margin="0,0,0,30" TextWrapping="Wrap" TextChanged="TextBox_TextChanged" Text="100" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="38"/>
+        <Label Content="y배율" Margin="0,0,43,30" VerticalAlignment="Bottom" Height="27" HorizontalAlignment="Right" Width="39"/>
     </Grid>
 </Window>
