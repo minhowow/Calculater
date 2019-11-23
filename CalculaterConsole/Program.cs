@@ -11,8 +11,6 @@ namespace CalculaterConsole
     {
         static void Main(string[] args)
         {
-
-
             Block a = Block.Parse("sin(1)");
             Block b = Block.Parse("-1");
             Block c = a.Plus(b);
