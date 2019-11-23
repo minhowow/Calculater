@@ -42,6 +42,20 @@ namespace Calculater
             this.type = type;
         }
 
+        public static bool TryParse(string str, out Equation equation)
+        {
+            try
+            {
+                equation = Parse(str);
+                return true;
+            }
+            catch (Exception)
+            {
+                equation = null;
+                return false;
+            }
+        }
+
         public static bool IsEquation(string str)
         {
             foreach (var item in parseName)

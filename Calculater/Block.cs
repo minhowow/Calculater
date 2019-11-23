@@ -89,9 +89,123 @@ namespace Calculater
             }
         }
 
+        public static bool TryParse(string str, out Block block)
+        {
+            try
+            {
+                block = Parse(str);
+                if (block != null&& block.IsValid())
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                block = null;
+            }
+            return false;
+        }
+
         public static bool IsBlock(string str)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return false;
+            }
+            str = str.Trim();
+
+            foreach (var item in TwoOperatorBlock.priority)
+            {
+                if (str.IndexOfAny(item.ToCharArray()) != -1)
+                {
+                    List<string> subjects = new List<string>();
+                    List<char> oper = new List<char>();
+                    int lastIndex = 0;
+                    int startIndex = 0;
+                    int Index = 0;
+                    string sub;
+                    int bracket = 0;
+                    bool success = false;
+
+                    while ((Index = str.IndexOfAny(item.ToCharArray(), startIndex)) != -1)
+                    {
+                        sub = str.Substring(startIndex, Index - startIndex);
+
+                        //괄호가 있으면
+                        bracket += sub.Count(e => e == '(');
+                        bracket -= sub.Count(e => e == ')');
+
+                        if (bracket == 0)
+                        {
+                            subjects.Add(str.Substring(lastIndex, Index - lastIndex));
+                            oper.Add(str[Index]);
+                            success = true;
+
+                            lastIndex = Index + 1;
+                        }
+                        startIndex = Index + 1;
+                    }
+                    sub = str.Substring(startIndex, str.Length - startIndex);
+                    //괄호가 있으면
+                    bracket += sub.Count(e => e == '(');
+                    bracket -= sub.Count(e => e == ')');
+
+                    if (bracket == 0)
+                    {
+                        subjects.Add(str.Substring(lastIndex, str.Length - lastIndex));
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                    if (success)
+                    {
+                        return subjects.All((st) =>
+                        {
+                            return Block.IsBlock(st);
+                        });
+                    }
+
+                }
+            }
+
+            if (str.EndsWith(")"))
+            {
+                string st = str.ToLower();
+
+                if (st.StartsWith("("))
+                {
+                    return /*BracketBlock.Create(*/Block.IsBlock(str.Substring(1, str.Length - 2))/*)*/;
+                }
+                else
+                {
+                    Dictionary<FunctionType, string> funcName = new Dictionary<FunctionType, string>() {
+                        { FunctionType.Sin ,"sin"} ,
+                        { FunctionType.Cos ,"cos"} ,
+                        { FunctionType.Tan ,"tan"} ,
+                        { FunctionType.Root ,"root"} ,
+                    };
+                    foreach (var item in funcName)
+                    {
+                        if (st.StartsWith(item.Value + "("))
+                        {
+                            string a = str.Substring(item.Value.Length + 1, str.Length - (2 + item.Value.Length));
+                            FunctionType type = item.Key;
+                            return Block.IsBlock(a);
+                        }
+                    }
+                }
+                return false;
+
+            }
+
+            if (char.IsLetter(str[0]) && !str.Any(e => char.IsWhiteSpace(e)))
+            {
+                return true;
+            }
+
+            return double.TryParse(str, out _);
         }
 
         public static Block Parse(string str)
@@ -203,7 +317,7 @@ namespace Calculater
         public abstract bool IsConst();
         public abstract bool IsOperator();
         public abstract bool IsBracket();
-
+        public abstract bool IsValid();
 
         public double Calculate()
         {
@@ -305,6 +419,10 @@ namespace Calculater
             return c.ToString();
         }
 
+        public override bool IsValid()
+        {
+            return true;
+        }
     }
     class BracketBlock : Block
     {
@@ -363,6 +481,11 @@ namespace Calculater
         public override string ToString()
         {
             return $"({a.ToString()})";
+        }
+
+        public override bool IsValid()
+        {
+            return a.IsValid();
         }
     }
     abstract class OperatorBlock : Block
@@ -597,6 +720,11 @@ namespace Calculater
         {
             return false;
         }
+
+        public override bool IsValid()
+        {
+            return a.IsValid() && b.IsValid();
+        }
     }
 
     enum FunctionType
@@ -697,6 +825,11 @@ namespace Calculater
         {
             return false;
         }
+
+        public override bool IsValid()
+        {
+            return a.IsValid();
+        }
     }
 
     enum SignType
@@ -791,6 +924,11 @@ namespace Calculater
             }
             return Create(blockA, type);
         }
+
+        public override bool IsValid()
+        {
+            return a.IsValid();
+        }
     }
 
     class UnknownBlock : Block
@@ -830,6 +968,11 @@ namespace Calculater
         public override bool IsOperator()
         {
             return false;
+        }
+
+        public override bool IsValid()
+        {
+            return true;
         }
 
         public override bool OperatorLowOrEqualPriority(int p)

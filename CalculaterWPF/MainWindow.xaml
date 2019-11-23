@@ -5,8 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CalculaterWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" SizeChanged="Window_SizeChanged">
     <Grid>
-        
+        <Canvas x:Name="canvas" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Canvas.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1" ScaleX="1"/>
+                    <SkewTransform AngleY="0" AngleX="0"/>
+                    <RotateTransform Angle="0"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Canvas.RenderTransform>
+        </Canvas>
+        <Label x:Name="textboxShow" Margin="0,0,0,34" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="159"/>
+        <TextBox x:Name="textbox" Margin="39,0,0,6" TextWrapping="Wrap" TextChanged="TextBox_TextChanged" Text="x" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120"/>
+        <Label Content="f(x) =" Margin="0,0,0,10" VerticalAlignment="Bottom" Height="23" HorizontalAlignment="Left" Width="39"/>
+        <TextBox x:Name="multiplyerBox" Margin="0,0,0,6" TextWrapping="Wrap" TextChanged="TextBox_TextChanged" Text="100" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="38"/>
+        <Label Content="배율" Margin="0,0,43,6" VerticalAlignment="Bottom" Height="27" HorizontalAlignment="Right" Width="39"/>
     </Grid>
 </Window>
